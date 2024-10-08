@@ -5,7 +5,6 @@ export interface IDeleteTransactionUseCase {
 export namespace IDeleteTransactionUseCase {
   export type Input = {
     transactionId: string
-    userId: string
   }
 
   export type Output = Promise<void>

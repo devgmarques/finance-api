@@ -78,7 +78,7 @@ describe("update transaction use case", () => {
       title: "title_01",
       type: "income",
       value: 0,
-      createdAt: new Date()
+      createdAt: expect.any(Date)
     })
   })
 })
