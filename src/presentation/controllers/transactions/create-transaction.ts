@@ -9,7 +9,6 @@ export class CreateTransactionController {
   async handle(request: FastifyRequest, response: FastifyReply) {
     try {
       const createTransactionBody = z.object({
-        userId: z.string(),
         title: z.string(),
         value: z.coerce.number(),
         type: z.enum(["income", "expense"]),  
@@ -18,7 +17,6 @@ export class CreateTransactionController {
       })
 
       const {
-        userId,
         title,
         value,
         type,
@@ -27,7 +25,7 @@ export class CreateTransactionController {
       } = createTransactionBody.parse(request.body)
 
       const result = await this.createTransactionUseCase.execute({
-        userId,
+        userId: request.user.sub,
         title,
         value,
         type,  

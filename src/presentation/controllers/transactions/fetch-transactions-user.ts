@@ -8,24 +8,16 @@ export class FetchTransactionsUserController {
 
   async handle(request: FastifyRequest, response: FastifyReply) {
     try {
-      const fetchTransactionsUserBody = z.object({
-        userId: z.string(),
-      })
-      
       const fetchTransactionsUserQuery = z.object({
         query: z.enum(["income", "expense"]).nullish()
       }) 
-
-      const {
-        userId,
-      } = fetchTransactionsUserBody.parse(request.params)
 
       const {
         query
       } = fetchTransactionsUserQuery.parse(request.query)
 
       const result = await this.fetchTransactionsUserUseCase.execute({
-        userId,
+        userId: request.user.sub,
         query: query ?? undefined
       })
 
