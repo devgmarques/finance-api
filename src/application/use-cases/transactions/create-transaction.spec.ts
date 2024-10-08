@@ -53,7 +53,7 @@ describe("create transaction use case", () => {
       title: "title",
       type: "expense",
       value: 0,
-      createdAt: new Date(),
+      createdAt: expect.any(Date),
     })
   })
 })

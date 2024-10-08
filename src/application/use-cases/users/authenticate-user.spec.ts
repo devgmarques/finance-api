@@ -7,7 +7,7 @@ import { UsersRepository } from "@/application/protocols/database"
 
 import { InvalidCredentialError, UserNotExistError } from "@/application/errors/errors"
 
-import { InMemoryHashRepository } from "@/infra/database/crypto/in-memory"
+import { InMemoryHashRepository } from "@/infra/crypto/in-memory"
 import { InMemoryUsersRepository } from "@/infra/database/in-memory"
 
 import { IAuthenticateUserUseCase } from "@/domain/use-cases/users"

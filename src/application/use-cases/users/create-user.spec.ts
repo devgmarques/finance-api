@@ -4,7 +4,7 @@ import { HashRepository } from '@/application/protocols/crypto'
 import { UsersRepository } from '@/application/protocols/database'
 
 import { InMemoryUsersRepository } from '@/infra/database/in-memory'
-import { InMemoryHashRepository } from '@/infra/database/crypto/in-memory'
+import { InMemoryHashRepository } from '@/infra/crypto/in-memory'
 
 import { ICreateUserUseCase } from '@/domain/use-cases/users'
 import { CreateUserUseCase } from './create-user'
