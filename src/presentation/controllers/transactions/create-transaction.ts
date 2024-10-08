@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify"
 import { z } from "zod"
 
-import { EmailAlreadyExistError } from "@/application/errors/errors"
 import { ICreateTransactionUseCase } from "@/domain/use-cases/transactions"
 
 export class CreateTransactionController {
@@ -9,7 +8,7 @@ export class CreateTransactionController {
 
   async handle(request: FastifyRequest, response: FastifyReply) {
     try {
-      const createUserBody = z.object({
+      const createTransactionBody = z.object({
         userId: z.string(),
         title: z.string(),
         value: z.coerce.number(),
@@ -25,7 +24,7 @@ export class CreateTransactionController {
         type,
         category,
         createdAt,
-      } = createUserBody.parse(request.body)
+      } = createTransactionBody.parse(request.body)
 
       const result = await this.createTransactionUseCase.execute({
         userId,
