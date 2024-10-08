@@ -6,3 +6,34 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  userId   String @id @default(uuid())
+  name     String
+  email    String
+  password String
+
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+
+  @@map("users")
+}
+
+enum TypeTransaction {
+  income
+  expense
+}
+
+model Transaction {
+  transactionId String          @id @default(uuid())
+  title         String
+  value         Float
+  type          TypeTransaction
+  category      String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [userId])
+
+  createdAt DateTime
+  updatedAt DateTime @updatedAt
+}
