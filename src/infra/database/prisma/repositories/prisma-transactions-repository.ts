@@ -47,30 +47,11 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     const transactions = await prisma.transaction.findMany({
       where: {
         userId: input.userId,
-        ...(input.query ? { type: input.query } : {})
+        type: input.query ? input.query : undefined
       }
     })
   
-    const totalIncome = await prisma.transaction.aggregate({
-      where: { userId: input.userId, type: "income" },
-      _sum: { value: true }
-    })
-  
-    const totalExpense = await prisma.transaction.aggregate({
-      where: { userId: input.userId, type: "expense" },
-      _sum: { value: true }
-    })
-  
-    const totalAmount = (totalIncome._sum.value || 0) - (totalExpense._sum.value || 0)
-  
-    return {
-      meta: {
-        totalAmount,
-        totalIncome: totalIncome._sum.value || 0,
-        totalExpense: totalExpense._sum.value || 0
-      },
-      transactions
-    }
+    return transactions
   }
 
   async findById(input: TransactionsRepository.FindById.Input): TransactionsRepository.FindById.Output {
@@ -81,5 +62,44 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     })
 
     return transaction
+  }
+
+  async getSummary(input: TransactionsRepository.GetSummary.Input): TransactionsRepository.GetSummary.Output {
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        userId: input.userId
+      }
+    })
+
+    const totalAmount = transactions.reduce((acc, item) => acc + item.value, 0)
+    const totalIncome = transactions
+      .filter(item => item.type === "income")
+      .reduce((acc, item) => acc + item.value, 0)
+    const totalExpense = transactions
+      .filter(item => item.type === "expense")
+      .reduce((acc, item) => acc + item.value, 0)
+
+    const categoryBreakdown: Record<string, { income: number, expense: number }> = {}
+
+    transactions.forEach(transaction => {
+      const { category, type, value } = transaction
+
+      if (!categoryBreakdown[category]) {
+        categoryBreakdown[category] = { income: 0, expense: 0 }
+      }
+
+      if (type === "income") {
+        categoryBreakdown[category].income += value
+      } else {
+        categoryBreakdown[category].expense += value
+      }
+    })
+
+    return {
+      totalAmount,
+      totalIncome,
+      totalExpense,
+      categoryBreakdown
+    }
   }
 }
