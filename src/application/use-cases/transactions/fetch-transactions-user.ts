@@ -8,9 +8,9 @@ export class FetchTransactionsUserUseCase implements IFetchTransactionsUserUseCa
   ) {}
 
   async execute(input: IFetchTransactionsUserUseCase.Input): IFetchTransactionsUserUseCase.Output {
-    const transactions = await this.transactionsRepository
+    const fetchTransactionSummary = await this.transactionsRepository
       .fetch({ userId: input.userId, query: input.query })
 
-    return transactions
+    return fetchTransactionSummary
   }
 } 

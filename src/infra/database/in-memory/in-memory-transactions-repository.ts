@@ -51,13 +51,31 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
 
   async fetch(input: TransactionsRepository.Fetch.Input): TransactionsRepository.Fetch.Output {
     let transactions = this.database.filter(item => item.userId === input.userId)
-
-    if(input.query) {
-      transactions = this.database
-        .filter(item => item.userId === input.userId && item.type === input.query)
+  
+    const totalIncome = this.database
+      .filter(item => item.userId === input.userId && item.type === 'income')
+      .reduce((acc, item) => acc + item.value, 0)
+  
+    const totalExpense = this.database
+      .filter(item => item.userId === input.userId && item.type === 'expense')
+      .reduce((acc, item) => acc + item.value, 0)
+  
+    let totalAmount = totalIncome - totalExpense
+  
+    if (input.query) {
+      transactions = transactions.filter(item => item.type === input.query)
+  
+      totalAmount = transactions.reduce((acc, item) => acc + item.value, 0)
     }
-
-    return transactions
+  
+    return {
+      transactions,
+      meta: {
+        totalAmount,
+        totalIncome,
+        totalExpense
+      }
+    }
   }
 
   async findById(input: TransactionsRepository.FindById.Input): TransactionsRepository.FindById.Output {

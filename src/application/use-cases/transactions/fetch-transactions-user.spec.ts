@@ -21,7 +21,7 @@ describe("fetch transactions user use case", () => {
       category: "category",
       title: "title",
       type: "expense",
-      value: 0,
+      value: 100,
       createdAt: new Date()
     })
   })
@@ -31,7 +31,10 @@ describe("fetch transactions user use case", () => {
       userId: "userId"
     })
 
-    expect(transactions).toHaveLength(1)
+    expect(transactions.transactions).toHaveLength(1)
+    expect(transactions.meta.totalAmount).toBe(-100)
+    expect(transactions.meta.totalExpense).toBe(100)
+    expect(transactions.meta.totalIncome).toBe(0)
   })
 
   it("should be able to filter per query a transactions income", async () => {
@@ -40,6 +43,6 @@ describe("fetch transactions user use case", () => {
       query: "income"
     })
 
-    expect(transactions).toHaveLength(0)
+    expect(transactions.transactions).toHaveLength(0)
   })
 })

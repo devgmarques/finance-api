@@ -47,11 +47,30 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     const transactions = await prisma.transaction.findMany({
       where: {
         userId: input.userId,
-        type: input.query
+        ...(input.query ? { type: input.query } : {})
       }
     })
-
-    return transactions
+  
+    const totalIncome = await prisma.transaction.aggregate({
+      where: { userId: input.userId, type: "income" },
+      _sum: { value: true }
+    })
+  
+    const totalExpense = await prisma.transaction.aggregate({
+      where: { userId: input.userId, type: "expense" },
+      _sum: { value: true }
+    })
+  
+    const totalAmount = (totalIncome._sum.value || 0) - (totalExpense._sum.value || 0)
+  
+    return {
+      meta: {
+        totalAmount,
+        totalIncome: totalIncome._sum.value || 0,
+        totalExpense: totalExpense._sum.value || 0
+      },
+      transactions
+    }
   }
 
   async findById(input: TransactionsRepository.FindById.Input): TransactionsRepository.FindById.Output {
