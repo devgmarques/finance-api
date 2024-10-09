@@ -27,7 +27,7 @@ export class DeleteTransactionController {
         return response.status(400).send({ message: error.message })
       }
 
-      return response.status(500).send()
+      throw error
     }
   }
 }

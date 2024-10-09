@@ -35,7 +35,7 @@ export class CreateTransactionController {
 
       return response.status(201).send(result)
     } catch (error: any) {
-      return response.status(500).send()
+      throw error
     }
   }
 }

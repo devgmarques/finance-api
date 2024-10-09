@@ -46,7 +46,7 @@ export class UpdateTransactionController {
         return response.status(404).send({ message: error.message })
       } 
 
-      return response.status(500).send()
+      throw error
     }
   }
 }

@@ -23,7 +23,7 @@ export class FetchTransactionsUserController {
 
       return response.status(200).send(result)
     } catch (error: any) {
-      return response.status(500).send()
+      throw error
     }
   }
 }
