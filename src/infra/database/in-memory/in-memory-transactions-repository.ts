@@ -52,30 +52,11 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
   async fetch(input: TransactionsRepository.Fetch.Input): TransactionsRepository.Fetch.Output {
     let transactions = this.database.filter(item => item.userId === input.userId)
   
-    const totalIncome = this.database
-      .filter(item => item.userId === input.userId && item.type === 'income')
-      .reduce((acc, item) => acc + item.value, 0)
-  
-    const totalExpense = this.database
-      .filter(item => item.userId === input.userId && item.type === 'expense')
-      .reduce((acc, item) => acc + item.value, 0)
-  
-    let totalAmount = totalIncome - totalExpense
-  
     if (input.query) {
       transactions = transactions.filter(item => item.type === input.query)
-  
-      totalAmount = transactions.reduce((acc, item) => acc + item.value, 0)
     }
   
-    return {
-      transactions,
-      meta: {
-        totalAmount,
-        totalIncome,
-        totalExpense
-      }
-    }
+    return transactions
   }
 
   async findById(input: TransactionsRepository.FindById.Input): TransactionsRepository.FindById.Output {
@@ -87,5 +68,39 @@ export class InMemoryTransactionsRepository implements TransactionsRepository {
     }
 
     return transaction
+  }
+
+  async getSummary(input: TransactionsRepository.GetSummary.Input): TransactionsRepository.GetSummary.Output {
+    const totalIncome = this.database
+      .filter(item => item.userId === input.userId && item.type === 'income')
+      .reduce((acc, item) => acc + item.value, 0)
+  
+    const totalExpense = this.database
+      .filter(item => item.userId === input.userId && item.type === 'expense')
+      .reduce((acc, item) => acc + item.value, 0)
+  
+    const totalAmount = totalIncome - totalExpense
+
+    const categoryBreakdown: Record<string, { income: number, expense: number }> = this.database
+      .reduce((acc, item) => {
+        if (!acc[item.category]) {
+          acc[item.category] = { 
+            income: 0, 
+            expense: 0 
+          }
+        }
+  
+        acc[item.category][item.type] += item.value
+  
+        return acc
+      }, {} as Record<string, { income: number, expense: number }>)
+
+  
+    return {
+      totalAmount,
+      totalExpense,
+      totalIncome,
+      categoryBreakdown
+    }
   }
 }

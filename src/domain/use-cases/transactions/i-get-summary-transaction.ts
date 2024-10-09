@@ -1,5 +1,3 @@
-import { Transaction } from "@/domain/entities"
-
 export interface IGetSummaryTransactionsUserUseCase {
   execute(input: IGetSummaryTransactionsUserUseCase.Input): IGetSummaryTransactionsUserUseCase.Output
 }
@@ -13,6 +11,8 @@ export namespace IGetSummaryTransactionsUserUseCase {
     totalAmount: number
     totalIncome: number
     totalExpense: number
-    categoryBreakdown: Record<string, number> 
+    categoryBreakdown: Record<string, { 
+      income: number, expense: number 
+    }>
   }>
 }
