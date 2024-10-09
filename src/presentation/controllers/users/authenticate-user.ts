@@ -26,7 +26,7 @@ export class AuthenticateUserController {
 
       const token = await response.jwtSign({ sub: result.userId })
 
-      response.status(200).send(token)
+      return response.status(200).send(token)
     } catch (error: any) {
       if (error instanceof UserNotExistError) {
         return response.status(404).send({ message: error.message })

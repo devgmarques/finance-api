@@ -10,18 +10,18 @@ export class DeleteTransactionController {
   async handle(request: FastifyRequest, response: FastifyReply) {
     try {
       const deleteTransactionParams = z.object({
-        transactionId: z.string(),
+        transactionId: z.string().uuid(),
       })
 
       const {
         transactionId
-      } = deleteTransactionParams.parse(request.body)
+      } = deleteTransactionParams.parse(request.params)
 
       await this.deleteTransactionUseCase.execute({
         transactionId
       })
 
-      response.status(200).send()
+      return response.status(200).send()
     } catch (error: any) {
       if(error instanceof TransactionNotExists) {
         return response.status(400).send({ message: error.message })

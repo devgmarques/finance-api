@@ -29,7 +29,7 @@ export class CreateUserController {
 
       const token = await response.jwtSign({ sub: result.userId })
 
-      response.status(201).send(token)
+      return response.status(201).send(token)
     } catch (error: any) {
       if (error instanceof EmailAlreadyExistError) {
         return response.status(400).send({ message: error.message })

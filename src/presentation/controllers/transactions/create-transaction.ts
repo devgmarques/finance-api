@@ -13,7 +13,7 @@ export class CreateTransactionController {
         value: z.coerce.number(),
         type: z.enum(["income", "expense"]),  
         category: z.string(),
-        createdAt: z.date()
+        createdAt: z.string().datetime()
       })
 
       const {
@@ -30,10 +30,10 @@ export class CreateTransactionController {
         value,
         type,  
         category, 
-        createdAt 
+        createdAt: new Date(createdAt) 
       })
 
-      response.status(201).send(result)
+      return response.status(201).send(result)
     } catch (error: any) {
       return response.status(500).send()
     }

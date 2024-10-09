@@ -21,7 +21,7 @@ export class FetchTransactionsUserController {
         query: query ?? undefined
       })
 
-      response.status(200).send(result)
+      return response.status(200).send(result)
     } catch (error: any) {
       return response.status(500).send()
     }

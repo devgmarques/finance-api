@@ -14,7 +14,6 @@ export class UpdateTransactionController {
         value: z.coerce.number(),
         type: z.enum(["income", "expense"]),  
         category: z.string(),
-        createdAt: z.date()
       })
 
       const updateTransactionParams = z.object({
@@ -41,7 +40,7 @@ export class UpdateTransactionController {
         category, 
       })
 
-      response.status(201).send(result)
+      return response.status(201).send(result)
     } catch (error: any) {
       if (error instanceof TransactionNotExists) {
         return response.status(404).send({ message: error.message })
