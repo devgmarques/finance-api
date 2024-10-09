@@ -7,7 +7,7 @@ import {
   makeUpdateTransactionController 
 } from "@/main/factories/transactions"
 
-import { verifyJwt } from "@/presentation/middlewares"
+import { verifyJwt } from "@/main/middlewares"
 
 export async function routesTransactions(app: FastifyInstance) {
   app.addHook("onRequest", verifyJwt)
