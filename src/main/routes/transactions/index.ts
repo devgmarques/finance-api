@@ -4,7 +4,8 @@ import {
   makeCreateTransactionController,
   makeDeleteTransactionController,
   makeFetchTransactionsUserController,
-  makeUpdateTransactionController 
+  makeUpdateTransactionController,
+  makeGetSummaryTransactionController
 } from "@/main/factories/transactions"
 
 import { verifyJwt } from "@/main/middlewares"
@@ -19,6 +20,10 @@ export async function routesTransactions(app: FastifyInstance) {
 
   app.get("/transactions", (req, res) => 
     makeFetchTransactionsUserController().handle(req, res))
+  app.get("/transactions/summary", (req, res) => 
+    makeGetSummaryTransactionController().handle(req, res))
+
+
   app.delete("/transactions/:transactionId", (req, res) => 
     makeDeleteTransactionController().handle(req, res))
 }
