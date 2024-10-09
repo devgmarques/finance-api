@@ -6,6 +6,7 @@ export type TransactionsRepository = {
   update(input: TransactionsRepository.Update.Input): TransactionsRepository.Update.Output
   delete(input: TransactionsRepository.Delete.Input): TransactionsRepository.Delete.Output
   fetch(input: TransactionsRepository.Fetch.Input): TransactionsRepository.Fetch.Output
+  getSummary(input: TransactionsRepository.GetSummary.Input): TransactionsRepository.GetSummary.Output
 }
 
 export namespace TransactionsRepository {
@@ -59,13 +60,21 @@ export namespace TransactionsRepository {
       query?: "income" | "expense"  
     }
 
+    export type Output = Promise<Transaction[]>
+  }
+
+  export namespace GetSummary {
+    export type Input = {
+      userId: string
+    }
+
     export type Output = Promise<{
-      meta: {
-        totalAmount: number
-        totalIncome: number
-        totalExpense: number
-      }
-      transactions: Transaction[]
+      totalAmount: number
+      totalIncome: number
+      totalExpense: number
+      categoryBreakdown: Record<string, 
+        { income: number, expense: number }
+      >
     }>
   }
 }
