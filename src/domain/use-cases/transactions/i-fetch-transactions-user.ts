@@ -10,12 +10,5 @@ export namespace IFetchTransactionsUserUseCase {
     query?: "income" | "expense"  
   }
 
-  export type Output = Promise<{
-    meta: {
-      totalAmount: number
-      totalIncome: number
-      totalExpense: number
-    }
-    transactions: Transaction[]
-  }>
+  export type Output = Promise<Transaction[]>
 }
