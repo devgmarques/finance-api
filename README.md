@@ -251,7 +251,6 @@ Nota: Todas as rotas relacionadas a transações requerem autenticação. Para a
 
 ## 7. **Erros Comuns**
 - **404 Not Found**: Retornado quando um recurso específico não é encontrado.
-- **422 Unprocessable Entity**: Retornado quando o forjador tem a quantidade máxima de aneis permitidos.
 - **500 Internal Server Error**: Quando ocorre algum erro inesperado no servidor.
 
 ## 8. **Considerações Finais**
